@@ -3,7 +3,7 @@ from snapshot import snapshot
 
 class universal_portfolio:
 
-    SAMPLES = 1e2
+    SAMPLES = 5e2
     # initialize the object for universal portfolio, n is the number of stocks
     def __init__(self, n):
         self.b = np.array([1/n] * n)

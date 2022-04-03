@@ -3,7 +3,7 @@ from snapshot import snapshot
 
 class ftrl:
 
-    SAMPLES = 1e2
+    SAMPLES = 5e2
 
     def __init__(self, n, l):
         self.b = np.array([1/n] * n)
@@ -36,6 +36,7 @@ class ftrl:
             total_performance = 0
             for stock_performance in self.stock_values:
                 total_performance += self.observe_loss(w, np.array(stock_performance))
+            total_performance += self.l * self.regularizer_function(w)
             if total_performance < min_loss:
                 min_portfolio = w
                 min_loss = total_performance
@@ -43,7 +44,7 @@ class ftrl:
 
 
     def observe_loss(self, w, x):
-        return -np.log(np.dot(w, x)) + self.l * self.regularizer_function(w)
+        return -np.log(np.dot(w, x))
     
     def recent_performance(self, x):
         return np.dot(self.b, x)

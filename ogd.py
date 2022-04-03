@@ -2,8 +2,6 @@ import numpy as np
 from snapshot import snapshot
 
 class ogd:
-    
-    eta = 2**-8
 
     def __init__(self, n, eta):
         self.n = n
@@ -29,7 +27,7 @@ class ogd:
         self.wealth = self.wealth * np.dot(self.b, x)
         self.take_snapshot()
 
-        y = online_alloc - self.eta * self.online_gradient(online_alloc)
+        y = online_alloc - self.eta * self.online_gradient(x)
         self.proj(y)
         self.b = self.b * i/(i+1) + y/(i+1)
         self.stock_values.append(x)
