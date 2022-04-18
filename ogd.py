@@ -1,4 +1,5 @@
 import numpy as np
+from sympy import total_degree
 from snapshot import snapshot
 
 class ogd:
@@ -9,6 +10,7 @@ class ogd:
         self.b = np.array([1/n] * n)
         self.stock_values = []
         self.wealth = 1
+        self.loss = 0
         self.snapshot = snapshot()
         self.take_snapshot()
 
@@ -25,6 +27,7 @@ class ogd:
 
     def step(self, x, online_alloc, i):
         self.wealth = self.wealth * np.dot(self.b, x)
+        self.loss += self.observe_loss(self.b, np.array(x))
         self.take_snapshot()
 
         y = online_alloc - self.eta * self.online_gradient(x)
@@ -32,6 +35,9 @@ class ogd:
         self.b = self.b * i/(i+1) + y/(i+1)
         self.stock_values.append(x)
         return y
+
+    def observe_loss(self, w, x):
+        return -np.log(np.dot(w, x))
 
     # x is performance for today
     def online_gradient(self, x):

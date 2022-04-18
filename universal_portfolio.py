@@ -9,6 +9,7 @@ class universal_portfolio:
         self.b = np.array([1/n] * n)
         self.stock_values = []
         self.wealth = 1
+        self.loss = 0
         self.snapshot = snapshot()
         self.take_snapshot()
 
@@ -28,6 +29,7 @@ class universal_portfolio:
         # compute how much we have in wealth using the strategy computed in
         # previous iteration
         self.wealth = self.wealth * np.dot(self.b, x)
+        self.loss += self.observe_loss(self.b, np.array(x))
         self.take_snapshot()
 
         # update portfolio for next iteration
@@ -45,6 +47,15 @@ class universal_portfolio:
             sample = np.random.rand(n)
             samples[i] = np.divide(sample, sum(sample))
         return samples
+
+    def calculate_total_loss(self):
+        total_performance = 0
+        for stock_performance in self.stock_values:
+            total_performance += self.observe_loss(self.b, np.array(stock_performance))
+        return total_performance
+
+    def observe_loss(self, w, x):
+        return -np.log(np.dot(w, x))
 
     # calculates weighted average of the performance of each sample, this is
     # the integration step in Universal Portfolio

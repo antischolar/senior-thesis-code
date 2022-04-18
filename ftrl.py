@@ -10,6 +10,7 @@ class ftrl:
         self.l = l
         self.stock_values = []
         self.wealth = 1
+        self.loss = 0
         self.snapshot = snapshot()
         self.take_snapshot()
     
@@ -22,15 +23,18 @@ class ftrl:
         self.snapshot.snapshot(self.b, self.wealth)
 
     def step(self, x):
+        self.b = self.find_regularized_leader()
         self.wealth = self.wealth * self.recent_performance(x)
         self.take_snapshot()
         self.stock_values.append(x)
-        self.b = self.find_regularized_leader()
-
+        self.loss += self.observe_loss(self.b, np.array(x))
+        
     def find_regularized_leader(self):
+        if len(self.stock_values) == 0:
+            return self.b
         samples = self.sample_from_probability_simplex()
         min_portfolio = samples[0]
-        min_loss = 999
+        min_loss = np.Infinity
         for sample in samples:
             w = sample
             total_performance = 0
