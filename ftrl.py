@@ -3,7 +3,7 @@ from snapshot import snapshot
 
 class ftrl:
 
-    SAMPLES = 5e2
+    SAMPLES = 5e4
 
     def __init__(self, n, l):
         self.b = np.array([1/n] * n)
