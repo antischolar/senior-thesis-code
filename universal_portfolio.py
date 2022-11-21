@@ -35,7 +35,7 @@ class universal_portfolio:
         # update portfolio for next iteration
         self.stock_values.append(x)
         simplex = self.sample_from_probability_simplex()
-        self.b = self.weighted_average(simplex, x)
+        self.b = self.weighted_average(simplex)
 
 
     # draws SAMPLES number of random probability simplexes
@@ -59,7 +59,7 @@ class universal_portfolio:
 
     # calculates weighted average of the performance of each sample, this is
     # the integration step in Universal Portfolio
-    def weighted_average(self, simplex, x):
+    def weighted_average(self, simplex):
         total_weight = 0
         total_vectors = np.zeros(len(self.b))
         for i in range(int(self.SAMPLES)):
